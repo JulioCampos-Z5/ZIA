@@ -20,6 +20,12 @@ export type Tarjeta = {
   empresa: string
   /** Frase corta debajo del nombre */
   lema?: string
+  /**
+   * Si la pones, la tarjeta usa el estilo lista: el nombre hasta arriba y
+   * debajo el lema y estas etiquetas, una por renglón. El cargo ya no se ve
+   * en la tarjeta, pero sigue yendo en el contacto guardado.
+   */
+  etiquetas?: string[]
   /** Teléfono a 10 dígitos, sin espacios */
   telefono?: string
   /** WhatsApp a 10 dígitos; si falta se usa el teléfono */
@@ -35,6 +41,13 @@ export type Tarjeta = {
   servicios?: { nombre: string; detalle: string }[]
 }
 
+/** "Lo que hacemos": lo comparten la tarjeta de ZIA y las de su equipo */
+const serviciosZIA = [
+  { nombre: 'Presencia digital', detalle: 'Página web, tarjeta digital y Google Maps desde $6,000.' },
+  { nombre: 'Apps a la medida', detalle: 'Web, móvil y escritorio desde $12,000.' },
+  { nombre: 'IA para tu empresa', detalle: 'Documentos, cotizaciones y papeleo. Por cotización.' },
+]
+
 export const tarjetas: Tarjeta[] = [
   {
     slug: 'zia',
@@ -45,11 +58,22 @@ export const tarjetas: Tarjeta[] = [
     telefono: '3339057215',
     correo: 'zyncosoft@gmail.com',
     web: 'https://zia-ia.pages.dev/',
-    servicios: [
-      { nombre: 'Presencia digital', detalle: 'Página web, tarjeta digital y Google Maps desde $6,000.' },
-      { nombre: 'Apps a la medida', detalle: 'Web, móvil y escritorio desde $12,000.' },
-      { nombre: 'IA para tu empresa', detalle: 'Documentos, cotizaciones y papeleo. Por cotización.' },
-    ],
+    servicios: serviciosZIA,
+  },
+  // Juan: /tarjeta/juan (datos de su tarjeta anterior de Zyncosoft)
+  {
+    slug: 'juan',
+    nombre: 'Juan Rodriguez',
+    cargo: 'Project Manager',
+    empresa: 'ZIA',
+    lema: 'Hecho con astucia. 🦊',
+    etiquetas: ['Presencia digital', 'Apps', 'IA'],
+    whatsapp: '3521165602',
+    correo: 'zyncosoft@gmail.com',
+    web: 'https://zia-ia.pages.dev/',
+    instagram: 'https://www.instagram.com/zyncosoft.oficial',
+    linkedin: 'https://www.linkedin.com/in/ju4d/?locale=es-ES',
+    servicios: serviciosZIA,
   },
   // Ejemplo de tarjeta personal: /tarjeta/ejemplo
   // Bórralo o cámbialo por la de alguien real.

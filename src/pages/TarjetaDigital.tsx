@@ -181,19 +181,30 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
   const url = window.location.origin + window.location.pathname
 
   // El QR mide lo mismo que el texto de al lado: del cargo (o del nombre, en
-  // celular) hasta el lema. Se recalcula cuando cambia el ancho de la tarjeta.
+  // celular) hasta el lema; en el estilo lista, del nombre hasta la lista.
+  // Se recalcula cuando cambia el ancho de la tarjeta.
   const bloqueRef = useRef<HTMLDivElement>(null)
   const cargoRef = useRef<HTMLParagraphElement>(null)
   const textoRef = useRef<HTMLDivElement>(null)
+  const nombreRef = useRef<HTMLSpanElement>(null)
+  const listaRef = useRef<HTMLUListElement>(null)
   const [ladoQr, setLadoQr] = useState(0)
   useEffect(() => {
     const bloque = bloqueRef.current
     if (!bloque) return
     const medir = () => {
-      const cargo = cargoRef.current!.getBoundingClientRect()
       const texto = textoRef.current!.getBoundingClientRect()
+      // Estilo lista: tan alto como el nombre más la lista, pero sin pasarse
+      // del espacio que deja libre el texto más ancho
+      if (nombreRef.current && listaRef.current) {
+        const anchoTexto = Math.max(nombreRef.current.offsetWidth, listaRef.current.offsetWidth)
+        const libre = bloque.clientWidth - anchoTexto - 16
+        setLadoQr(Math.floor(Math.min(texto.height, libre)))
+        return
+      }
+      const cargo = cargoRef.current?.getBoundingClientRect()
       // En celular el cargo ocupa todo el ancho y el QR solo acompaña al nombre
-      const cargoAlLado = cargo.width < bloque.clientWidth - 1
+      const cargoAlLado = cargo != null && cargo.width < bloque.clientWidth - 1
       setLadoQr(Math.round(texto.bottom - (cargoAlLado ? cargo.top : texto.top)))
     }
     const obs = new ResizeObserver(medir)
@@ -219,6 +230,9 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
   }
 
   const wa = t.whatsapp || t.telefono
+  // En el estilo lista el nombre va en un renglón y los apellidos en otro
+  const [primeraPalabra, ...apellidos] = t.nombre.trim().split(/\s+/)
+  const resto = apellidos.join(' ')
   const compartir = async () => {
     try {
       if (navigator.share) {
@@ -274,9 +288,33 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
               <Logo className="h-12 w-12" />
             </div>
 
-            {/* Con espacio, el QR va del cargo hasta el lema. En celular el
-                cargo ocupa todo el ancho y el QR baja junto al nombre, para no
-                partir el cargo en dos renglones. */}
+            {t.etiquetas ? (
+              <>
+                {/* Estilo lista: el nombre arriba (el apellido en otro renglón)
+                    y, abajo, el lema y las etiquetas de una en una. El QR va al
+                    lado de todo el bloque */}
+                <div ref={bloqueRef} className="mt-5 flex items-center gap-4">
+                  <div ref={textoRef} className="min-w-0 flex-1">
+                    <h1 className="text-4xl">
+                      <span ref={nombreRef} className="inline-block">
+                        {primeraPalabra}
+                        {resto && <><br />{resto}</>}
+                        <span className="text-accent">.</span>
+                      </span>
+                    </h1>
+                    <ul ref={listaRef} className="mt-3 w-max space-y-1.5">
+                      {[t.lema, ...t.etiquetas].filter(Boolean).map((s) => (
+                        <li key={s} className="label">{s}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <QrAmpliable svg={qr} tamano={ladoQr} />
+                </div>
+              </>
+            ) : (
+            /* Con espacio, el QR va del cargo hasta el lema. En celular el
+               cargo ocupa todo el ancho y el QR baja junto al nombre, para no
+               partir el cargo en dos renglones. */
             <div ref={bloqueRef} className="mt-5 grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2">
               <p ref={cargoRef} className="label col-span-2 @min-[23rem]:col-span-1">{t.cargo}</p>
               <div ref={textoRef} className="min-w-0">
@@ -290,6 +328,7 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
                 <QrAmpliable svg={qr} tamano={ladoQr} />
               </div>
             </div>
+            )}
 
             {/* Acciones principales */}
             <div className="mt-7 grid grid-cols-2 gap-3">
