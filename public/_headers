@@ -1,0 +1,23 @@
+# Reglas de caché para Cloudflare Pages.
+#
+# Los archivos de /assets/ los genera Vite con un hash en el nombre
+# (index-IjH9URVA.js), así que si cambia el contenido cambia la URL:
+# se pueden guardar para siempre sin miedo a servir una versión vieja.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Las imágenes conservan el mismo nombre entre despliegues, así que van
+# con una semana. Si se cambia el logo, tarda como mucho ese tiempo en
+# actualizarse en quien ya lo tenga guardado.
+/*.png
+  Cache-Control: public, max-age=604800
+/*.svg
+  Cache-Control: public, max-age=604800
+/*.webp
+  Cache-Control: public, max-age=604800
+
+# El HTML nunca se guarda: es lo que apunta a los assets con hash.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate

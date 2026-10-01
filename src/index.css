@@ -1,0 +1,200 @@
+@import 'tailwindcss';
+
+/* El modo oscuro lo activa data-theme="dark" en <html>, no el sistema */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/*
+ * Tres referencias mezcladas:
+ *  - Sintetizador neumórfico: fondo perla, relieves suaves, teclas con LED rojo
+ *    y una pantalla oscura.
+ *  - Póster suizo: retícula, filetes negros, números grandes y un solo rojo.
+ *  - Tipografía monoespaciada para etiquetas, números y precios.
+ */
+:root {
+  --bg: #ebebef;
+  --hi: #ffffff;
+  --lo: #c6c6cf;
+  --fg: #141416;
+  --muted: #6c6c77;
+  --line: #d2d2da;
+  --accent: #ea2a1e;
+  --on-accent: #ffffff;
+  --screen: #17171a;
+  --screen-fg: #ececf1;
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg: #1d1e22;
+  --hi: #282a30;
+  --lo: #111215;
+  --fg: #eeeef1;
+  --muted: #8e8e99;
+  --line: #2f3137;
+  --accent: #ff4434;
+  --on-accent: #ffffff;
+  --screen: #0d0d0f;
+  --screen-fg: #ececf1;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-screen: var(--screen);
+  --color-screen-fg: var(--screen-fg);
+}
+
+@theme {
+  /* Tinta fija, igual en claro y oscuro */
+  --color-ink: #141416;
+
+  --font-sans: 'Archivo', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  h1, h2, h3, h4 {
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@utility container-x {
+  width: 100%;
+  max-width: 74rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* ---- Relieves neumórficos ---- */
+@utility neu {
+  background-color: var(--bg);
+  box-shadow: 8px 8px 18px var(--lo), -8px -8px 18px var(--hi);
+}
+@utility neu-sm {
+  background-color: var(--bg);
+  box-shadow: 4px 4px 9px var(--lo), -4px -4px 9px var(--hi);
+}
+@utility neu-in {
+  background-color: var(--bg);
+  box-shadow: inset 4px 4px 9px var(--lo), inset -4px -4px 9px var(--hi);
+}
+
+/* Pantalla oscura del "aparato" */
+@utility screen {
+  background-color: var(--screen);
+  color: var(--screen-fg);
+  box-shadow: inset 0 2px 14px rgba(0, 0, 0, 0.6), 0 0 0 6px var(--bg), 0 0 0 7px var(--line);
+}
+
+/* Etiqueta pequeña en mayúsculas monoespaciada */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---- Botones ---- */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border-radius: 999px;
+  padding: 0.85rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  &:active { transform: translateY(1px); }
+}
+@utility btn-accent {
+  background-color: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 5px 5px 12px var(--lo), -5px -5px 12px var(--hi), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  &:hover { opacity: 0.92; }
+}
+@utility btn-neu {
+  background-color: var(--bg);
+  color: var(--fg);
+  box-shadow: 5px 5px 12px var(--lo), -5px -5px 12px var(--hi);
+  &:hover { color: var(--accent); }
+  &:active { box-shadow: inset 3px 3px 7px var(--lo), inset -3px -3px 7px var(--hi); }
+}
+
+/* LED de las teclas del sintetizador */
+@utility led {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background-color: var(--lo);
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+@utility led-on {
+  background-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.cursor {
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.4s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}

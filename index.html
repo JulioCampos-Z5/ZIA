@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ebebef" />
+    <!-- Aplica el tema guardado antes de pintar: sin parpadeo al cargar en oscuro -->
+    <script>
+      try { if (localStorage.getItem("zia-tema") === "dark") document.documentElement.dataset.theme = "dark" } catch (e) {}
+    </script>
+
+    <title>ZIA | Página web, apps a la medida e inteligencia artificial para empresas</title>
+    <meta
+      name="description"
+      content="ZIA pone a tu negocio en internet: página web, tarjeta digital y Google Maps por $6,000 con IVA. Apps web, móviles y de escritorio desde $12,000. IA personalizada para documentos y cotizaciones."
+    />
+    <meta name="author" content="ZIA" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://zia.pages.dev/" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://zia.pages.dev/" />
+    <meta property="og:site_name" content="ZIA" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:title" content="ZIA | Presencia digital, apps e inteligencia artificial" />
+    <meta
+      property="og:description"
+      content="Página web, tarjeta digital y Google Maps por $6,000. Apps a la medida desde $12,000. IA personalizada para tu empresa."
+    />
+    <meta property="og:image" content="https://zia.pages.dev/logo.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "ZIA",
+        "alternateName": "Zyncosoft",
+        "url": "https://zia.pages.dev/",
+        "logo": "https://zia.pages.dev/logo.svg",
+        "telephone": "+523339057215",
+        "email": "zyncosoft@gmail.com",
+        "areaServed": "MX",
+        "description": "Presencia digital (página web, tarjeta digital, Google Maps y SEO), desarrollo de apps web, móviles y de escritorio, e infraestructura de inteligencia artificial personalizada para empresas.",
+        "makesOffer": [
+          {
+            "@type": "Offer",
+            "name": "Presencia digital",
+            "price": "6000",
+            "priceCurrency": "MXN",
+            "description": "Página web con formulario, WhatsApp y Google Maps, tarjeta digital, alta en Google Maps, SEO y metadatos para IA. Pago único con IVA incluido; mantenimiento de $2,000 MXN anuales a partir del segundo año."
+          },
+          {
+            "@type": "Offer",
+            "name": "Apps a la medida",
+            "priceSpecification": { "@type": "PriceSpecification", "minPrice": "12000", "priceCurrency": "MXN" },
+            "description": "Aplicaciones web, móviles y de escritorio. Incluye el paquete Presencia digital."
+          },
+          {
+            "@type": "Offer",
+            "name": "Infraestructura de IA para empresas",
+            "description": "IA personalizada para generar documentos, cotizaciones y gestionar información administrativa. En la nube o en equipo propio. Por cotización."
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
