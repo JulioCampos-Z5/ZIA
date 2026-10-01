@@ -44,7 +44,7 @@ export const tarjetas: Tarjeta[] = [
     lema: 'Hecho con astucia. 🦊',
     telefono: '3339057215',
     correo: 'zyncosoft@gmail.com',
-    web: 'https://zia.pages.dev/',
+    web: 'https://zia-ia.pages.dev/',
     servicios: [
       { nombre: 'Presencia digital', detalle: 'Página web, tarjeta digital y Google Maps desde $6,000.' },
       { nombre: 'Apps a la medida', detalle: 'Web, móvil y escritorio desde $12,000.' },
@@ -61,7 +61,7 @@ export const tarjetas: Tarjeta[] = [
     lema: 'Hecho con astucia. 🦊',
     telefono: '3339057215',
     correo: 'zyncosoft@gmail.com',
-    web: 'https://zia.pages.dev/',
+    web: 'https://zia-ia.pages.dev/',
     direccion: 'Guadalajara, Jalisco',
   },
 ]
