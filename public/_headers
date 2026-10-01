@@ -19,5 +19,14 @@
 # El HTML nunca se guarda: es lo que apunta a los assets con hash.
 /
   Cache-Control: public, max-age=0, must-revalidate
+
+# El service worker se revisa en cada visita: así los teléfonos con la
+# tarjeta instalada reciben los cambios en cuanto se publican.
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/manifest/*
+  Content-Type: application/manifest+json; charset=utf-8
+  Cache-Control: public, max-age=0, must-revalidate
 /index.html
   Cache-Control: public, max-age=0, must-revalidate

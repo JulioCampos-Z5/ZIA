@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import QRCode from 'qrcode'
 import Logo from '../components/Logo'
 import { useTema } from '../lib/tema'
+import { hacerInstalable } from '../lib/instalable'
 import { tarjetaPorSlug, type Tarjeta } from '../data/tarjetas'
 import {
   IconArrow,
@@ -216,6 +217,7 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
   useEffect(() => {
     if (!t) return
     document.title = `${t.nombre} · Tarjeta digital`
+    hacerInstalable(t.slug, t.nombre.split(/\s+/)[0])
     QRCode.toString(url, { type: 'svg', margin: 1, color: { dark: '#141416', light: '#ffffff' } }).then(setQr)
   }, [t, url])
 
