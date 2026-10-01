@@ -155,23 +155,40 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
               <circle cx="330" cy="40" r="6" fill="#141416" />
               <path d="M-10 160 V90 A70 70 0 0 1 60 160 Z" fill="#141416" />
             </svg>
+            {/* 
             <p className="absolute left-6 top-5 font-mono text-[0.65rem] uppercase tracking-[0.15em] opacity-80">
               Nº 001 · Tarjeta digital
             </p>
+             */}
           </div>
 
           <div className="relative px-6 pb-7">
-            {/* Insignia con el logo, encima del corte rojo */}
-            <div className="neu -mt-10 flex h-20 w-20 items-center justify-center rounded-3xl">
-              <Logo className="h-12 w-12" />
-            </div>
+            <div className="flex gap-4">
+              <div className="min-w-0 flex-1">
+                {/* Insignia con el logo, encima del corte rojo */}
+                <div className="neu -mt-10 flex h-20 w-20 items-center justify-center rounded-3xl">
+                  <Logo className="h-12 w-12" />
+                </div>
 
-            <p className="label mt-5">{t.cargo}</p>
-            <h1 className="mt-2 text-4xl">
-              {t.nombre}
-              <span className="text-accent">.</span>
-            </h1>
-            {t.lema && <p className="mt-2 text-sm text-muted">{t.lema}</p>}
+                <p className="label mt-5">{t.cargo}</p>
+                <h1 className="mt-2 text-4xl">
+                  {t.nombre}
+                  <span className="text-accent">.</span>
+                </h1>
+                {t.lema && <p className="mt-2 text-sm text-muted">{t.lema}</p>}
+              </div>
+
+              {/* QR junto al nombre, para que la escaneen desde otro celular */}
+              <div className="mt-4 shrink-0 text-center">
+                <div
+                  className="h-28 w-28 overflow-hidden rounded-xl bg-white p-1.5 sm:h-32 sm:w-32 [&_svg]:h-full [&_svg]:w-full"
+                  dangerouslySetInnerHTML={{ __html: qr }}
+                  role="img"
+                  aria-label="Código QR de esta tarjeta"
+                />
+                <p className="mt-2 font-mono text-[0.6rem] uppercase tracking-[0.15em] text-accent">● Escanea</p>
+              </div>
+            </div>
 
             {/* Acciones principales */}
             <div className="mt-7 grid grid-cols-2 gap-3">
@@ -239,25 +256,6 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
                 </ul>
               </div>
             )}
-
-            {/* QR en la pantalla oscura, para que la escaneen desde otro celular */}
-            <div className="screen mt-8 rounded-2xl p-5">
-              <div className="flex justify-between font-mono text-[0.62rem] uppercase tracking-[0.15em]">
-                <span className="text-accent">● Escanea</span>
-                <span className="opacity-50">Comparte esta tarjeta</span>
-              </div>
-              <div className="mt-4 flex items-center gap-5">
-                <div
-                  className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-white p-1.5 [&_svg]:h-full [&_svg]:w-full"
-                  dangerouslySetInnerHTML={{ __html: qr }}
-                  role="img"
-                  aria-label="Código QR de esta tarjeta"
-                />
-                <p className="font-mono text-xs leading-relaxed opacity-70 break-all">
-                  {url.replace(/^https?:\/\//, '')}
-                </p>
-              </div>
-            </div>
           </div>
         </article>
 
