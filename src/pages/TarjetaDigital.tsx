@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import QRCode from 'qrcode'
 import Logo from '../components/Logo'
 import { useTema } from '../lib/tema'
@@ -90,6 +90,90 @@ function Tecla({ href, icon: Icon, nombre, detalle }: { href: string; icon: type
   )
 }
 
+/**
+ * QR que, al tocarlo, crece hacia el centro de la pantalla para escanearlo
+ * más fácil. La copia grande arranca encima del QR chico y se transforma
+ * hasta el centro; al cerrar hace el camino de regreso.
+ */
+function QrAmpliable({ svg }: { svg: string }) {
+  const ref = useRef<HTMLButtonElement>(null)
+  const [fase, setFase] = useState<'cerrado' | 'abriendo' | 'abierto' | 'cerrando'>('cerrado')
+  const [lado, setLado] = useState(0)
+  const [desde, setDesde] = useState('')
+
+  /** Transformación que encima la copia grande sobre el QR chico */
+  const medir = () => {
+    const r = ref.current!.getBoundingClientRect()
+    const grande = Math.min(window.innerWidth, window.innerHeight, 440) * 0.82
+    const dx = r.left + r.width / 2 - window.innerWidth / 2
+    const dy = r.top + r.height / 2 - window.innerHeight / 2
+    setLado(grande)
+    setDesde(`translate(${dx}px, ${dy}px) scale(${r.width / grande})`)
+  }
+
+  const abrir = () => {
+    medir()
+    setFase('abriendo')
+    // Dos cuadros: uno para pintar la posición inicial y otro para animar
+    requestAnimationFrame(() => requestAnimationFrame(() => setFase('abierto')))
+  }
+
+  const cerrar = () => {
+    medir()
+    setFase('cerrando')
+    setTimeout(() => setFase('cerrado'), 350)
+  }
+
+  useEffect(() => {
+    if (fase !== 'abierto') return
+    const alTeclear = (e: KeyboardEvent) => e.key === 'Escape' && cerrar()
+    window.addEventListener('keydown', alTeclear)
+    return () => window.removeEventListener('keydown', alTeclear)
+  }, [fase])
+
+  const visible = fase === 'abierto'
+  const qrClase = 'overflow-hidden rounded-xl bg-white p-1.5 [&_svg]:h-full [&_svg]:w-full'
+
+  return (
+    <>
+      <button
+        ref={ref}
+        type="button"
+        onClick={abrir}
+        aria-label="Ampliar código QR de esta tarjeta"
+        // Crece con el ancho de la tarjeta: chico en celular, más grande en pantallas anchas
+        className={`aspect-square w-[clamp(4rem,30cqw,8rem)] shrink-0 cursor-zoom-in transition-transform hover:scale-105 ${qrClase} ${fase === 'cerrado' ? '' : 'opacity-0'}`}
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
+
+      {fase !== 'cerrado' && (
+        <div
+          className={`fixed inset-0 z-50 cursor-zoom-out bg-black/70 backdrop-blur-sm transition-opacity duration-300 motion-reduce:transition-none ${visible ? 'opacity-100' : 'opacity-0'}`}
+          onClick={cerrar}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Código QR ampliado"
+        >
+          <div
+            className={`fixed left-1/2 top-1/2 shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none ${qrClase}`}
+            style={{
+              width: lado,
+              height: lado,
+              // Proporcionales al QR chico para que el crecimiento no brinque
+              padding: lado * 0.055,
+              borderRadius: lado * 0.1,
+              marginLeft: -lado / 2,
+              marginTop: -lado / 2,
+              transform: visible ? 'none' : desde,
+            }}
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+        </div>
+      )}
+    </>
+  )
+}
+
 export default function TarjetaDigital({ slug }: { slug: string }) {
   const t = tarjetaPorSlug(slug)
   const [qr, setQr] = useState('')
@@ -162,31 +246,27 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
              */}
           </div>
 
-          <div className="relative px-6 pb-7">
-            <div className="flex gap-4">
-              <div className="min-w-0 flex-1">
-                {/* Insignia con el logo, encima del corte rojo */}
-                <div className="neu -mt-10 flex h-20 w-20 items-center justify-center rounded-3xl">
-                  <Logo className="h-12 w-12" />
-                </div>
+          <div className="@container relative px-6 pb-7">
+            {/* Insignia con el logo, encima del corte rojo */}
+            <div className="neu -mt-10 flex h-20 w-20 items-center justify-center rounded-3xl">
+              <Logo className="h-12 w-12" />
+            </div>
 
-                <p className="label mt-5">{t.cargo}</p>
-                <h1 className="mt-2 text-4xl">
+            {/* Con espacio, el QR se alinea arriba con el cargo. En celular el
+                cargo ocupa todo el ancho y el QR baja junto al nombre, para no
+                partir el cargo en dos renglones. La tercera fila vacía absorbe
+                lo que el QR mide de más, así no separa el cargo del nombre. */}
+            <div className="mt-5 grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 @min-[23rem]:grid-rows-[auto_auto_1fr]">
+              <p className="label col-span-2 @min-[23rem]:col-span-1">{t.cargo}</p>
+              <div className="min-w-0">
+                <h1 className="text-4xl">
                   {t.nombre}
                   <span className="text-accent">.</span>
                 </h1>
                 {t.lema && <p className="mt-2 text-sm text-muted">{t.lema}</p>}
               </div>
-
-              {/* QR junto al nombre, para que la escaneen desde otro celular */}
-              <div className="mt-4 shrink-0 text-center">
-                <div
-                  className="h-28 w-28 overflow-hidden rounded-xl bg-white p-1.5 sm:h-32 sm:w-32 [&_svg]:h-full [&_svg]:w-full"
-                  dangerouslySetInnerHTML={{ __html: qr }}
-                  role="img"
-                  aria-label="Código QR de esta tarjeta"
-                />
-                <p className="mt-2 font-mono text-[0.6rem] uppercase tracking-[0.15em] text-accent">● Escanea</p>
+              <div className="col-start-2 row-start-2 @min-[23rem]:row-span-3 @min-[23rem]:row-start-1 @min-[23rem]:self-start">
+                <QrAmpliable svg={qr} />
               </div>
             </div>
 
