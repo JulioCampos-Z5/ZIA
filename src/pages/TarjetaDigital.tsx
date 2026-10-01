@@ -95,7 +95,7 @@ function Tecla({ href, icon: Icon, nombre, detalle }: { href: string; icon: type
  * más fácil. La copia grande arranca encima del QR chico y se transforma
  * hasta el centro; al cerrar hace el camino de regreso.
  */
-function QrAmpliable({ svg }: { svg: string }) {
+function QrAmpliable({ svg, tamano }: { svg: string; tamano: number }) {
   const ref = useRef<HTMLButtonElement>(null)
   const [fase, setFase] = useState<'cerrado' | 'abriendo' | 'abierto' | 'cerrando'>('cerrado')
   const [lado, setLado] = useState(0)
@@ -141,8 +141,8 @@ function QrAmpliable({ svg }: { svg: string }) {
         type="button"
         onClick={abrir}
         aria-label="Ampliar código QR de esta tarjeta"
-        // Crece con el ancho de la tarjeta: chico en celular, más grande en pantallas anchas
-        className={`aspect-square w-[clamp(4rem,30cqw,8rem)] shrink-0 cursor-zoom-in transition-transform hover:scale-105 ${qrClase} ${fase === 'cerrado' ? '' : 'opacity-0'}`}
+        style={{ width: tamano, height: tamano }}
+        className={`block shrink-0 cursor-zoom-in transition-transform hover:scale-105 ${qrClase} ${fase === 'cerrado' ? '' : 'opacity-0'}`}
         dangerouslySetInnerHTML={{ __html: svg }}
       />
 
@@ -179,6 +179,28 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
   const [qr, setQr] = useState('')
   const [aviso, setAviso] = useState('')
   const url = window.location.origin + window.location.pathname
+
+  // El QR mide lo mismo que el texto de al lado: del cargo (o del nombre, en
+  // celular) hasta el lema. Se recalcula cuando cambia el ancho de la tarjeta.
+  const bloqueRef = useRef<HTMLDivElement>(null)
+  const cargoRef = useRef<HTMLParagraphElement>(null)
+  const textoRef = useRef<HTMLDivElement>(null)
+  const [ladoQr, setLadoQr] = useState(0)
+  useEffect(() => {
+    const bloque = bloqueRef.current
+    if (!bloque) return
+    const medir = () => {
+      const cargo = cargoRef.current!.getBoundingClientRect()
+      const texto = textoRef.current!.getBoundingClientRect()
+      // En celular el cargo ocupa todo el ancho y el QR solo acompaña al nombre
+      const cargoAlLado = cargo.width < bloque.clientWidth - 1
+      setLadoQr(Math.round(texto.bottom - (cargoAlLado ? cargo.top : texto.top)))
+    }
+    const obs = new ResizeObserver(medir)
+    obs.observe(bloque)
+    obs.observe(textoRef.current!)
+    return () => obs.disconnect()
+  }, [t])
 
   useEffect(() => {
     if (!t) return
@@ -252,21 +274,20 @@ export default function TarjetaDigital({ slug }: { slug: string }) {
               <Logo className="h-12 w-12" />
             </div>
 
-            {/* Con espacio, el QR se alinea arriba con el cargo. En celular el
+            {/* Con espacio, el QR va del cargo hasta el lema. En celular el
                 cargo ocupa todo el ancho y el QR baja junto al nombre, para no
-                partir el cargo en dos renglones. La tercera fila vacía absorbe
-                lo que el QR mide de más, así no separa el cargo del nombre. */}
-            <div className="mt-5 grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 @min-[23rem]:grid-rows-[auto_auto_1fr]">
-              <p className="label col-span-2 @min-[23rem]:col-span-1">{t.cargo}</p>
-              <div className="min-w-0">
+                partir el cargo en dos renglones. */}
+            <div ref={bloqueRef} className="mt-5 grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2">
+              <p ref={cargoRef} className="label col-span-2 @min-[23rem]:col-span-1">{t.cargo}</p>
+              <div ref={textoRef} className="min-w-0">
                 <h1 className="text-4xl">
                   {t.nombre}
                   <span className="text-accent">.</span>
                 </h1>
                 {t.lema && <p className="mt-2 text-sm text-muted">{t.lema}</p>}
               </div>
-              <div className="col-start-2 row-start-2 @min-[23rem]:row-span-3 @min-[23rem]:row-start-1 @min-[23rem]:self-start">
-                <QrAmpliable svg={qr} />
+              <div className="col-start-2 row-start-2 @min-[23rem]:row-span-2 @min-[23rem]:row-start-1 @min-[23rem]:self-start">
+                <QrAmpliable svg={qr} tamano={ladoQr} />
               </div>
             </div>
 
