@@ -13,4 +13,4 @@ export const whatsapp = (mensaje = '¡Hola! Vengo de la página de ZIA y me gust
 export const CORREO = 'zyncosoft@gmail.com'
 
 /** Pendiente: cambiar cuando ZIA tenga dominio propio (también en index.html, robots.txt, sitemap.xml y llms.txt). */
-export const SITIO_URL = 'https://zia.pages.dev/'
+export const SITIO_URL = 'https://zia-ia.pages.dev/'

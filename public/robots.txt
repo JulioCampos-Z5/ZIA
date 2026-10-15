@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zia.pages.dev/sitemap.xml
+Sitemap: https://zia-ia.pages.dev/sitemap.xml

@@ -152,7 +152,7 @@ Usa `Seccion` para que tenga el filete y el número suizo. Numera en orden
 - **Tarjetas digitales**: copiar un bloque en `src/data/tarjetas.ts` con un
   `slug` nuevo; queda en `/tarjeta/<slug>`. La de slug `zia` también responde
   en `/tarjeta`. Los campos vacíos no se muestran.
-- **Dominio**: hoy es `zia.pages.dev`. Al cambiarlo, actualizar `index.html`,
+- **Dominio**: hoy es `zia-ia.pages.dev`. Al cambiarlo, actualizar `index.html`,
   `public/robots.txt`, `public/sitemap.xml`, `public/llms.txt` y
   `src/lib/contacto.ts`.
 
