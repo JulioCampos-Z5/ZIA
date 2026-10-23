@@ -20,6 +20,7 @@ const apps = [
   'Apps móviles (Android y iPhone)',
   'Programas de escritorio',
   'Módulos según tu negocio: inventario, ventas, clientes, cotizaciones…',
+  'Bases de datos',
   'Capacitación para tu equipo',
 ]
 
