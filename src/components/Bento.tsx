@@ -91,7 +91,7 @@ export default function Bento() {
             </div>
             <div className="relative z-10 mt-auto">
               <p className="font-mono text-3xl font-bold">$6,000</p>
-              <p className="font-mono text-sm opacity-75">Pago único · IVA incluido</p>
+              <p className="font-mono text-sm opacity-75">Al año · o $599 al mes</p>
             </div>
           </a>
 
@@ -109,7 +109,7 @@ export default function Bento() {
             <div className="flex items-end justify-between font-mono">
               <div>
                 <p className="text-3xl font-bold">$12,000</p>
-                <p className="text-sm text-muted">Desde</p>
+                <p className="text-sm text-muted">Desde, al año</p>
               </div>
               <div className="text-right">
                 <p className="text-xl font-bold">Web · Móvil</p>

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { IconArrow } from './icons'
 import Seccion from './Seccion'
 import { whatsapp } from '../lib/contacto'
@@ -45,13 +46,38 @@ function Pantalla({ arriba, precio, abajo }: { arriba: string; precio: string; a
         <span className="text-accent">● {arriba}</span>
         <span className="opacity-50">MXN</span>
       </div>
-      <p className="mt-2 text-5xl font-bold tracking-tight">{precio}</p>
-      <p className="mt-1 text-[0.7rem] uppercase tracking-[0.12em] opacity-50">{abajo}</p>
+      {/* key: al cambiar el precio se vuelve a montar y entra con la animación del display */}
+      <p key={precio} className="cambio mt-2 text-5xl font-bold tracking-tight">
+        {precio}
+      </p>
+      <p key={abajo} className="cambio mt-1 text-[0.7rem] uppercase tracking-[0.12em] opacity-50">
+        {abajo}
+      </p>
     </div>
   )
 }
 
+type Plazo = 'MENSUAL' | 'ANUAL'
+
+/** Mensualidad y pago anual de cada paquete; el anual sale más barato que 12 mensualidades */
+const precios = {
+  presencia: { mes: 599, anio: 6000 },
+  apps: { mes: 1199, anio: 12000 },
+}
+
+const pesos = (n: number) => `$${n.toLocaleString('en-US')}`
+
+function pantallaDe({ mes, anio }: { mes: number; anio: number }, plazo: Plazo) {
+  return plazo === 'MENSUAL'
+    ? { precio: pesos(mes), abajo: 'Al mes' }
+    : { precio: pesos(anio), abajo: `Al año · ahorras ${pesos(mes * 12 - anio)}` }
+}
+
 export default function Paquetes() {
+  const [plazo, setPlazo] = useState<Plazo>('ANUAL')
+  const presenciaPrecio = pantallaDe(precios.presencia, plazo)
+  const appsPrecio = pantallaDe(precios.apps, plazo)
+
   return (
     <Seccion
       id="paquetes"
@@ -60,7 +86,33 @@ export default function Paquetes() {
       titulo="Elige cómo quieres crecer"
       bajada="Empieza por estar en internet y, cuando lo necesites, da el salto a tus propias aplicaciones."
     >
-      <div className="mt-14 grid gap-8 lg:grid-cols-2">
+      <div className="reveal mt-12 flex flex-col items-center gap-3">
+        <div className="neu-in relative flex w-full max-w-xs rounded-full p-1.5">
+          {/* Tecla que se desliza bajo la opción elegida */}
+          <span
+            aria-hidden
+            className={`neu-sm absolute inset-y-1.5 left-1.5 w-[calc(50%-0.375rem)] rounded-full transition-transform duration-500 ease-[cubic-bezier(.34,1.56,.64,1)] ${
+              plazo === 'ANUAL' ? 'translate-x-full' : ''
+            }`}
+          />
+          {(['MENSUAL', 'ANUAL'] as Plazo[]).map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => setPlazo(p)}
+              aria-pressed={plazo === p}
+              className={`relative z-10 flex-1 rounded-full py-2 font-mono text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${
+                plazo === p ? 'text-accent' : 'text-muted'
+              }`}
+            >
+              {p === 'MENSUAL' ? 'Mensual' : 'Anual'}
+            </button>
+          ))}
+        </div>
+        <p className="text-sm text-muted">Pagando el año completo pagas menos que mes a mes.</p>
+      </div>
+
+      <div className="mt-10 grid gap-8 lg:grid-cols-2">
         <article className="neu reveal flex flex-col rounded-[2rem] p-7 sm:p-9">
           <div className="flex items-center justify-between">
             <p className="label">Paquete 01</p>
@@ -70,11 +122,7 @@ export default function Paquetes() {
           <p className="mt-3 text-sm leading-relaxed text-muted">
             Para que tus clientes te encuentren, te conozcan y te escriban.
           </p>
-          <Pantalla arriba="Pago único" precio="$6,000" abajo="IVA incluido" />
-          <p className="neu-in mt-6 rounded-2xl px-5 py-4 text-sm text-muted">
-            Mantenimiento de <strong className="text-fg">$2,000 al año</strong> a partir del segundo año. El primero
-            ya va incluido.
-          </p>
+          <Pantalla arriba={plazo === 'MENSUAL' ? 'Mensual' : 'Anual'} {...presenciaPrecio} />
           <Lista items={presencia} />
           <a
             href={whatsapp('¡Hola! Me interesa el paquete Presencia digital de ZIA.')}
@@ -97,7 +145,13 @@ export default function Paquetes() {
           <p className="mt-3 text-sm leading-relaxed text-muted">
             Tu presencia digital más el sistema que tu negocio necesita: web, móvil, escritorio o los tres.
           </p>
-          <Pantalla arriba="Desde" precio="$12,000" abajo="Según complejidad y módulos" />
+          <Pantalla arriba={plazo === 'MENSUAL' ? 'Desde · mensual' : 'Desde · anual'} {...appsPrecio} />
+          <p className="mt-3 text-xs text-muted">El precio final depende de la complejidad y los módulos.</p>
+          {plazo === 'MENSUAL' && (
+            <p className="cambio mt-1 text-xs text-muted">
+              Los costos de publicar tus apps en App Store y Play Store se pagan aparte.
+            </p>
+          )}
           <Lista items={apps} />
           <a href="#contacto" className="btn btn-accent mt-auto w-full">
             Cotizar mi app <IconArrow />

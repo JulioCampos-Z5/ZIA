@@ -10,8 +10,8 @@ landing en español de México con tres líneas de negocio:
 
 | Línea | Precio | Notas |
 |---|---|---|
-| Presencia digital | **$6,000 MXN**, pago único, **IVA incluido** | Mantenimiento **$2,000/año** a partir del 2.º año. Solo página web, sin apps. |
-| Apps a la medida | **desde $12,000 MXN** | Web, móvil y escritorio. Incluye Presencia digital. |
+| Presencia digital | **$599 MXN al mes** o **$6,000 MXN al año** | El anual sale más barato que 12 mensualidades. Sin IVA ni mantenimiento aparte. Solo página web, sin apps. |
+| Apps a la medida | **desde $1,199 MXN al mes** o **desde $12,000 MXN al año** | Sin IVA ni mantenimiento aparte. Web, móvil y escritorio. Incluye Presencia digital. |
 | Infraestructura de IA | Por cotización | En la nube u oficina. Se cobra: diagnóstico y equipo → desarrollo y entrenamiento → mantenimiento mensual o anual. Para despachos y comercios. |
 
 Eslogan: **"Hecho con astucia. 🦊"** (el mismo de Zyncosoft). No inventar otro.
@@ -181,7 +181,6 @@ Para probarlo en local se usa Wrangler con un `.dev.vars` (está en `.gitignore`
 ## Pendientes conocidos
 
 - Dominio propio y correo propio de ZIA.
-- Confirmar si "desde $12,000" lleva IVA y si las apps tienen mantenimiento anual.
 - Domicilio fiscal en el aviso de privacidad (`[domicilio fiscal]` en `Legal.tsx`) y revisión legal.
 - Imagen PNG 1200×630 para compartir en redes (`og:image` hoy apunta al SVG).
 - Quitar o reemplazar la tarjeta `ejemplo` de `data/tarjetas.ts` antes de publicar.

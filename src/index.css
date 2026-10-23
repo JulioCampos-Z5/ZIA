@@ -198,3 +198,11 @@
   stroke-dashoffset: 1;
   animation: draw 1.4s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
+
+/* Cambio de precio en el display: entra desde abajo, como un dígito que gira */
+@keyframes cambio {
+  from { opacity: 0; transform: translateY(0.4em); filter: blur(3px); }
+}
+.cambio {
+  animation: cambio 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}

@@ -2,12 +2,12 @@ import Seccion from "./Seccion"
 
 const preguntas = [
   {
-    p: '¿Qué incluye exactamente el pago de $6,000?',
-    r: 'Tu página web con formulario de contacto, botón de WhatsApp y mapa de Google; tu tarjeta digital; el alta de tu negocio en Google Maps; SEO y metadatos para buscadores, redes sociales y asistentes de IA. Es un pago único con IVA incluido y el primer año de mantenimiento.',
+    p: '¿Qué incluye el paquete Presencia digital?',
+    r: 'Tu página web con formulario de contacto, botón de WhatsApp y mapa de Google; tu tarjeta digital; el alta de tu negocio en Google Maps; SEO y metadatos para buscadores, redes sociales y asistentes de IA. Cuesta $6,000 al año o $599 al mes.',
   },
   {
-    p: '¿Qué cubre el mantenimiento de $2,000 al año?',
-    r: 'Que tu página siga en línea, segura y funcionando. Se paga a partir del segundo año.',
+    p: '¿Puedo pagar cada mes?',
+    r: 'Sí. Presencia digital cuesta $599 al mes o $6,000 al año, y Apps a la medida desde $1,199 al mes o desde $12,000 al año. Pagando el año completo ahorras más de dos mensualidades.',
   },
   {
     p: '¿El paquete de apps incluye la página web?',

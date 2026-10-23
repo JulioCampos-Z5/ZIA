@@ -43,8 +43,8 @@ export type Tarjeta = {
 
 /** "Lo que hacemos": lo comparten la tarjeta de ZIA y las de su equipo */
 const serviciosZIA = [
-  { nombre: 'Presencia digital', detalle: 'Página web, tarjeta digital y Google Maps desde $6,000.' },
-  { nombre: 'Apps a la medida', detalle: 'Web, móvil y escritorio desde $12,000.' },
+  { nombre: 'Presencia digital', detalle: 'Página web, tarjeta digital y Google Maps desde $599 al mes.' },
+  { nombre: 'Apps a la medida', detalle: 'Web, móvil y escritorio desde $1,199 al mes.' },
   { nombre: 'IA para tu empresa', detalle: 'Documentos, cotizaciones y papeleo. Por cotización.' },
 ]
 

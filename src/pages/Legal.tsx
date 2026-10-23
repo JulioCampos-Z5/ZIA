@@ -35,11 +35,11 @@ const privacidad = [
 const terminos = [
   {
     t: 'Paquete Presencia digital',
-    p: 'Pago único de $6,000 MXN con IVA incluido. Incluye el primer año de mantenimiento; a partir del segundo año el mantenimiento cuesta $2,000 MXN anuales. No incluye aplicaciones web.',
+    p: '$599 MXN al mes o $6,000 MXN al año. No incluye aplicaciones web.',
   },
   {
     t: 'Paquete Apps a la medida',
-    p: 'Desde $12,000 MXN; el precio final se fija en una cotización por escrito según la complejidad y los módulos solicitados. Incluye todo lo del paquete Presencia digital.',
+    p: 'Desde $1,199 MXN al mes o desde $12,000 MXN al año; el precio final se fija en una cotización por escrito según la complejidad y los módulos solicitados. Incluye todo lo del paquete Presencia digital.',
   },
   {
     t: 'Infraestructura de IA',
